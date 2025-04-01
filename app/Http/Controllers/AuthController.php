@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Auth;
 use Hash;
 use Illuminate\Http\Request;
 use Password;
@@ -50,19 +51,16 @@ class AuthController extends Controller
             ]);
         };
 
-        // Create a token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        Auth::login($user);
 
         // Return info
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user
+            'message' => 'welcome'
         ]);
     }
 
     public function logout(Request $request) {
-        $request->user()->tokens()->delete();
+        
 
         return response()->json([
             'message' => 'Logged out successfully'
